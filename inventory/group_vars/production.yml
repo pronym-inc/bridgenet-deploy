@@ -1,7 +1,7 @@
 ---
 enable_runserver: false
 enable_notebook: false
-server_name: bridgenet.pronym.com
+server_name: api.bridgenetins.com
 listen_port: 443
 pronym_environment: production
 include_ssl_certs: false

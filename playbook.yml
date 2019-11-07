@@ -39,10 +39,11 @@
       admin_username: "{{ django_admin_username | default('admin') }}"
       admin_password: "{{ django_admin_password | default('password123') }}"
       virtualenv_dir: "{{ virtualenv_dir }}"
-      do_webpack_packaging: false
+      do_webpack_packaging: "{{ do_webpack_packaging | default(True) }}"
       extra_directories:
         - repo
-        - ssh
+      webpack_targets:
+        - web
     nginx:
       copy_ssl_certs: "{{ copy_ssl_certs | default(False) }}"
       create_self_signed_ssl: "{{ create_self_signed_ssl | default(False) }}"
@@ -60,7 +61,7 @@
             - url: static
               path: "{{ var_dir }}"
             - url: packagedjs
-              path: "{{ var_dir }}" 
+              path: "{{ var_dir }}"
     postgres:
       secrets_key_prefix: default_db
     supervisor:
