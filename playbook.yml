@@ -63,7 +63,7 @@
             - url: packagedjs
               path: "{{ var_dir }}"
     postgres:
-      secrets_key_prefix: default_db
+      secrets_key_prefix: db
     supervisor:
       conf_dir: "{{ virtualenv_dir }}/etc/supervisor"
       environment: PYTHONPATH={{ src_base }},DJANGO_SETTINGS_MODULE={{ django_settings_module }},PRONYM_ENVIRONMENT={{ pronym_environment }}
