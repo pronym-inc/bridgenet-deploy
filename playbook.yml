@@ -14,7 +14,7 @@
     virtualenv_base: /webapps
     virtualenv_dir: "{{ virtualenv_base }}/{{ project_name }}"
     secrets_path: /etc/secrets.json
-    src_base: "/src/{{ project_name }}"
+    src_base: "{{ src_dir | default('/webapps/bridgenet/src/bridgenet') }}"
     var_dir: "{{ virtualenv_dir }}/var"
     log_dir: "{{ var_dir }}/log"
     django_settings_module: "{{ project_name }}.conf.environments.{{ pronym_environment }}"

@@ -21,7 +21,8 @@ Vagrant.configure("2") do |config|
                 runserver_port: 8000,
                 notebook_port: 8100,
                 copy_local_secrets: true,
-                copy_ssl_certs: false
+                copy_ssl_certs: false,
+                app_username: "vagrant"
             }
         end
     end
