@@ -10,11 +10,11 @@
   vars:
     copy_local_secrets: true
     project_name: bridgenet
-    username: bridgenet
+    username: "{{ app_username | default('bridgenet') }}"
     virtualenv_base: /webapps
     virtualenv_dir: "{{ virtualenv_base }}/{{ project_name }}"
     secrets_path: /etc/secrets.json
-    src_base: "{{ virtualenv_dir }}/src/{{ project_name }}"
+    src_base: "/src/{{ project_name }}"
     var_dir: "{{ virtualenv_dir }}/var"
     log_dir: "{{ var_dir }}/log"
     django_settings_module: "{{ project_name }}.conf.environments.{{ pronym_environment }}"
@@ -22,11 +22,16 @@
     server_config:
       apt_dependencies:
         - ansible
+        - yarn
+      apt_repos:
+        - key_url: https://dl.yarnpkg.com/debian/pubkey.gpg
+          repo_url: deb https://dl.yarnpkg.com/debian/ stable main
       git_email: "{{ git_email | default('') }}"
       git_name: "{{ git_name | default('') }}"
       user: "{{ username }}"
       vagrant_user_password: $1$SomeSalt$GeiX8X5vXsCoyilpMJP3A1
       virtualenv_base: "{{ virtualenv_base }}"
+      src_dir: "{{ src_base }}"
     django_app:
       git_url: git@github.com:pronym-inc/bridgenet.git
       gunicorn_log_dir: "{{ log_dir }}/gunicorn"

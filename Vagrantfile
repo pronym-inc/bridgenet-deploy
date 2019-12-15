@@ -2,6 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
+    config.vm.synced_folder "src", "/src"
     config.vm.define "web" do |web|
         web.vm.box = "ubuntu/bionic64"
         web.vm.network "private_network", ip: "192.168.50.50"
