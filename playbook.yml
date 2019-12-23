@@ -48,7 +48,7 @@
       extra_directories:
         - repo
       webpack_targets:
-        - bndashboard
+        - bnadmin
         - web
     nginx:
       copy_ssl_certs: "{{ copy_ssl_certs | default(False) }}"
