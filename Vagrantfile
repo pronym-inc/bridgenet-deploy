@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
             ansible.tags = "initial-vagrant"
             ansible.verbose = true
             ansible.extra_vars = {
-                src_dir: "/src",
+                src_dir: "/src/bridgenet",
                 server_name: "bridgenet.local",
                 listen_port: 80,
                 pronym_environment: "vagrant",
