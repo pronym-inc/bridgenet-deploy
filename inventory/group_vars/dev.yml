@@ -1,0 +1,9 @@
+---
+enable_runserver: false
+enable_notebook: false
+server_name: dev-api.bridgenetins.com
+listen_port: 443
+pronym_environment: dev
+include_ssl_certs: true
+copy_ssl_certs: true
+copy_local_secrets: true
