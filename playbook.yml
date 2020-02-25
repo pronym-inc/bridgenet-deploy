@@ -34,6 +34,7 @@
       src_dir: "{{ src_base }}"
     django_app:
       git_url: git@github.com:pronym-inc/bridgenet.git
+      git_branch: "{{ django_git_branch }}"
       gunicorn_log_dir: "{{ log_dir }}/gunicorn"
       gunicorn_socket_path: "{{ gunicorn_socket_path }}"
       project_name: "{{ project_name }}"
