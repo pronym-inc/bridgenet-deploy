@@ -23,7 +23,8 @@ Vagrant.configure("2") do |config|
                 notebook_port: 8100,
                 copy_local_secrets: true,
                 copy_ssl_certs: false,
-                app_username: "vagrant"
+                app_username: "vagrant",
+                django_git_branch: "develop"
             }
         end
     end
