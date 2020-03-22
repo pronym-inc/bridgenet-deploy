@@ -61,6 +61,7 @@
           server_name: "{{ server_name }}"
           enable_ssl: "{{ include_ssl_certs | default(True) }}"
           listen_port: "{{ listen_port }}"
+          site_aliases: "{{ site_aliases | default([]) }}"
           socket_path: "{{ gunicorn_socket_path }}"
           ssl_key_path: /etc/ssl/private/bridgenet.key
           ssl_crt_path: /etc/ssl/certs/bridgenet.crt
