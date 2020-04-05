@@ -208,3 +208,9 @@
             - update
       tags:
         - update
+    - include_role:
+        name: run-integration-tests
+        tasks_from: run
+        apply:
+          tags:
+            - update
