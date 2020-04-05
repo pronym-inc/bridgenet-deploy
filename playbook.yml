@@ -214,3 +214,5 @@
         apply:
           tags:
             - update
+      tags:
+        - update
