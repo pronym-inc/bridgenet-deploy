@@ -5,3 +5,5 @@ id_rsa
 .DS_Store
 playbook.retry
 src/bridgenet
+lib/python3.6
+.idea/

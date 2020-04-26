@@ -8,17 +8,17 @@
     - supervisor
   become: yes
   vars:
-    copy_local_secrets: true
     project_name: bridgenet
     username: "{{ app_username | default('bridgenet') }}"
     virtualenv_base: /webapps
     virtualenv_dir: "{{ virtualenv_base }}/{{ project_name }}"
     secrets_path: /etc/secrets.json
-    src_base: "{{ src_dir | default('/webapps/bridgenet/src/bridgenet') }}"
+    src_base: "{{ virtualenv_dir }}/src/{{ project_name }}"
+    lib_base: "{{ virtualenv_dir }}/lib"
     var_dir: "{{ virtualenv_dir }}/var"
     log_dir: "{{ var_dir }}/log"
     django_settings_module: "{{ project_name }}.conf.environments.{{ pronym_environment }}"
-    gunicorn_socket_path: "{{ var_dir }}/run/{{ project_name }}_socket"
+    vagrant_ip: "{{ vm_ip | default('') }}"
     server_config:
       apt_dependencies:
         - ansible
@@ -32,11 +32,16 @@
       vagrant_user_password: $1$SomeSalt$GeiX8X5vXsCoyilpMJP3A1
       virtualenv_base: "{{ virtualenv_base }}"
       src_dir: "{{ src_base }}"
+      localhost_aliases:
+        - "{{ server_name }}"
+        - "{{ dashboard_server_name }}"
     django_app:
       git_url: git@github.com:pronym-inc/bridgenet.git
       git_branch: "{{ django_git_branch }}"
+      gunicorn_enabled: "{{ gunicorn_enabled | default(True) }}"
       gunicorn_log_dir: "{{ log_dir }}/gunicorn"
-      gunicorn_socket_path: "{{ gunicorn_socket_path }}"
+      gunicorn_socket_path: /webapps/bridgenet/var/run/bridgenet_socket
+      gunicorn_workers: "{{ gunicorn_workers | default(5) }}"
       project_name: "{{ project_name }}"
       settings_module: "{{ django_settings_module }}"
       src_base: "{{ src_base }}"
@@ -51,6 +56,14 @@
       webpack_targets:
         - bnadmin
         - web
+    integration_tests:
+      enabled: "{{ integration_tests_enabled | default(False) }}"
+      command: "{{ virtualenv_dir }}/bin/pytest -c {{ src_base }}/{{ project_name }}/api_integration/conf/tox-prod.ini"
+      environment:
+        PYTHONPATH: "{{ src_base }}"
+        BRIDGENET_API_BASE_URL: https://{{ server_name }}
+        BRIDGENET_API_USERNAME: integration
+        BRIDGENET_API_PASSWORD: methodicus1
     nginx:
       copy_ssl_certs: "{{ copy_ssl_certs | default(False) }}"
       create_self_signed_ssl: "{{ create_self_signed_ssl | default(False) }}"
@@ -61,8 +74,9 @@
           server_name: "{{ server_name }}"
           enable_ssl: "{{ include_ssl_certs | default(True) }}"
           listen_port: "{{ listen_port }}"
-          site_aliases: "{{ site_aliases | default([]) }}"
-          socket_path: "{{ gunicorn_socket_path }}"
+          site_aliases:
+            - "{{ dashboard_server_name }}"
+          proxy_url: "{{ nginx_proxy_url | default('http://unix:/webapps/bridgenet/var/run/bridgenet_socket') }}"
           ssl_key_path: /etc/ssl/private/bridgenet.key
           ssl_crt_path: /etc/ssl/certs/bridgenet.crt
           static_paths:
@@ -80,32 +94,41 @@
       service_path: /etc/systemd/system
       user: "{{ username }}"
       processes:
-        - name: gunicorn
-          command: "{{ virtualenv_dir }}/bin/gunicorn -c {{ virtualenv_dir }}/etc/gunicorn.conf.py {{ project_name }}.conf.wsgi.app"
         - name: celery
           command: "{{ virtualenv_dir }}/bin/celery -A {{ project_name }} worker -l info"
         - name: celery_beat
           command: "{{ virtualenv_dir }}/bin/celery -A {{ project_name }} beat --pidfile {{ var_dir }}/run/celerybeat.pid --schedule {{ var_dir }}/run/celerybeat.schedule"
       vagrant_processes:
-        - name: notebook
-          command: "{{ virtualenv_dir }}/bin/python {{ virtualenv_dir }}/bin/manage.py shell_plus --notebook"
-          directory: "{{ var_dir }}/notebooks"
         - name: runserver
-          command: "{{ virtualenv_dir }}/bin/python {{ virtualenv_dir }}/bin/manage.py runserver 0.0.0.0:{{ runserver_port | default(8000) }}"
-
+          command: "{{ virtualenv_dir }}/bin/python {{ virtualenv_dir }}/bin/manage.py runserver 0.0.0.0:8000"
+      nonvagrant_processes:
+        - name: gunicorn
+          command: "{{ virtualenv_dir }}/bin/gunicorn -c {{ virtualenv_dir }}/etc/gunicorn.conf.py {{ project_name }}.conf.wsgi.app"
+    wdio:
+      enabled: true
+      base_dir: "{{ src_base }}/{{ project_name }}/wdio/"
   tasks:
     - name: copy local secrets
       copy:
         src: secrets.json
         dest: "{{ secrets_path }}"
-      when: copy_local_secrets
       tags:
-        - always
+        - initial
+        - update
     - include_vars:
         file: secrets.json
         name: secrets
       tags:
         - always
+    - name: vagrant system cleanup
+      include_role:
+        name: configure-server
+        tasks_from: initial_vagrant
+        apply:
+          tags:
+            - initial-vagrant
+      tags:
+        - initial-vagrant
     - name: system setup
       include_role:
         name: configure-server
@@ -113,10 +136,8 @@
         apply:
           tags:
             - initial
-            - initial-vagrant
       tags:
         - initial
-        - initial-vagrant
     - name: vagrant system setup
       include_role:
         name: configure-server
@@ -132,9 +153,9 @@
         tasks_from: real
         apply:
           tags:
-            - initial
+            - initial-non-vagrant
       tags:
-        - initial
+        - initial-non-vagrant
     - name: DB setup
       include_role:
         name: postgres
@@ -142,20 +163,16 @@
         apply:
           tags:
             - initial
-            - initial-vagrant
       tags:
         - initial
-        - initial-vagrant
     - include_role:
         name: django-application
         tasks_from: install
         apply:
           tags:
             - initial
-            - initial-vagrant
       tags:
         - initial
-        - initial-vagrant
     - include_role:
         name: django-application
         tasks_from: vagrant
@@ -170,10 +187,8 @@
         apply:
           tags:
             - initial
-            - initial-vagrant
       tags:
         - initial
-        - initial-vagrant
     - include_role:
         name: supervisor
         tasks_from: vagrant
@@ -188,10 +203,16 @@
         apply:
           tags:
             - initial
-            - initial-vagrant
       tags:
         - initial
-        - initial-vagrant
+    - include_role:
+        name: wdio-tests
+        tasks_from: install
+        apply:
+          tags:
+            - initial
+      tags:
+        - initial
     - include_role:
         name: django-application
         tasks_from: update
@@ -216,3 +237,11 @@
             - update
       tags:
         - update
+    - include_role:
+        name: wdio-tests
+        tasks_from: run
+        apply:
+          tags:
+            - run-wdio
+      tags:
+        - run-wdio

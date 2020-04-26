@@ -6,5 +6,5 @@ listen_port: 443
 pronym_environment: dev
 include_ssl_certs: true
 copy_ssl_certs: true
-copy_local_secrets: true
 django_git_branch: develop
+integration_tests_enabled: true

@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-    config.vm.synced_folder "src", "/src"
+    config.vm.synced_folder "src", "/webapps/bridgenet/src"
     config.vm.define "web" do |web|
         web.vm.box = "ubuntu/bionic64"
         web.vm.network "private_network", ip: "192.168.50.50"
@@ -11,20 +11,19 @@ Vagrant.configure("2") do |config|
         end
         web.vm.provision :ansible_local do |ansible|
             ansible.playbook = "playbook.yml"
-            ansible.tags = "initial-vagrant"
+            ansible.tags = "initial,initial-vagrant"
             ansible.verbose = true
             ansible.extra_vars = {
-                src_dir: "/src/bridgenet",
                 server_name: "bridgenet.local",
+                dashboard_server_name: "bndashboard.local",
                 listen_port: 80,
-                pronym_environment: "vagrant",
-                include_ssl_certs: false,
-                runserver_port: 8000,
-                notebook_port: 8100,
-                copy_local_secrets: true,
-                copy_ssl_certs: false,
                 app_username: "vagrant",
-                django_git_branch: "develop"
+                pronym_environment: "vagrant",
+                django_git_branch: "develop",
+                include_ssl_certs: false,
+                copy_ssl_certs: false,
+                gunicorn_enabled: false,
+                nginx_proxy_url: "http://localhost:8000"
             }
         end
     end
