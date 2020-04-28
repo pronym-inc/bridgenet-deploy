@@ -14,11 +14,9 @@
     virtualenv_dir: "{{ virtualenv_base }}/{{ project_name }}"
     secrets_path: /etc/secrets.json
     src_base: "{{ virtualenv_dir }}/src/{{ project_name }}"
-    lib_base: "{{ virtualenv_dir }}/lib"
     var_dir: "{{ virtualenv_dir }}/var"
     log_dir: "{{ var_dir }}/log"
     django_settings_module: "{{ project_name }}.conf.environments.{{ pronym_environment }}"
-    vagrant_ip: "{{ vm_ip | default('') }}"
     server_config:
       apt_dependencies:
         - ansible
@@ -38,7 +36,6 @@
     django_app:
       git_url: git@github.com:pronym-inc/bridgenet.git
       git_branch: "{{ django_git_branch }}"
-      gunicorn_enabled: "{{ gunicorn_enabled | default(True) }}"
       gunicorn_log_dir: "{{ log_dir }}/gunicorn"
       gunicorn_socket_path: /webapps/bridgenet/var/run/bridgenet_socket
       gunicorn_workers: "{{ gunicorn_workers | default(5) }}"

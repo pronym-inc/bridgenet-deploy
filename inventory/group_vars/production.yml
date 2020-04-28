@@ -1,6 +1,4 @@
 ---
-enable_runserver: false
-enable_notebook: false
 server_name: api.bridgenetins.com
 listen_port: 443
 pronym_environment: production

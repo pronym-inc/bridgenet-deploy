@@ -14,16 +14,15 @@ Vagrant.configure("2") do |config|
             ansible.tags = "initial,initial-vagrant"
             ansible.verbose = true
             ansible.extra_vars = {
-                server_name: "bridgenet.local",
-                dashboard_server_name: "bndashboard.local",
-                listen_port: 80,
                 app_username: "vagrant",
-                pronym_environment: "vagrant",
+                copy_ssl_certs: false,
+                dashboard_server_name: "bndashboard.local",
                 django_git_branch: "develop",
                 include_ssl_certs: false,
-                copy_ssl_certs: false,
-                gunicorn_enabled: false,
+                listen_port: 80,
                 nginx_proxy_url: "http://localhost:8000"
+                pronym_environment: "vagrant",
+                server_name: "bridgenet.local"
             }
         end
     end
