@@ -242,3 +242,12 @@
             - run-wdio
       tags:
         - run-wdio
+  post_tasks:
+    - name: Bootstrap wdio tests
+      become_user: "{{ username }}"
+      shell: source ~/.nvm/nvm.sh && npm i && npx wdio run wdio.conf.js --spec signup.ts
+      args:
+        chdir: "{{ wdio.base_dir }}"
+        executable: /bin/bash
+      tags:
+        - initial
