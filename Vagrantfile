@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
                 django_git_branch: "develop",
                 include_ssl_certs: false,
                 listen_port: 80,
-                nginx_proxy_url: "http://localhost:8000"
+                nginx_proxy_url: "http://localhost:8000",
                 pronym_environment: "vagrant",
                 server_name: "bridgenet.local"
             }
