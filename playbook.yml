@@ -210,6 +210,14 @@
             - initial
       tags:
         - initial
+    - name: Bootstrap wdio tests
+      become_user: "{{ username }}"
+      shell: source ~/.nvm/nvm.sh && npm i && npx wdio run wdio.conf.js --spec signup.ts
+      args:
+        chdir: "{{ wdio.base_dir }}"
+        executable: /bin/bash
+      tags:
+        - initial
     - include_role:
         name: django-application
         tasks_from: update
@@ -242,9 +250,3 @@
             - run-wdio
       tags:
         - run-wdio
-    - name: Bootstrap wdio tests
-      become_user: "{{ username }}"
-      shell: source ~/.nvm/nvm.sh && npm i && npx wdio run wdio.conf.js
-      args:
-        chdir: "{{ wdio.base_dir }}"
-        executable: /bin/bash
