@@ -3,7 +3,7 @@
 
 Vagrant.configure("2") do |config|
     config.vm.synced_folder "src", "/webapps/bridgenet/src"
-    config.vm.define "web" do |web|
+    config.vm.define "all_in_one" do |web|
         web.vm.box = "ubuntu/bionic64"
         web.vm.network "private_network", ip: "192.168.50.50"
         web.vm.provider "virtualbox" do |v|
@@ -11,18 +11,18 @@ Vagrant.configure("2") do |config|
         end
         web.vm.provision :ansible_local do |ansible|
             ansible.playbook = "playbook.yml"
-            ansible.tags = "initial,initial-vagrant"
+            ansible.tags = "initial"
             ansible.verbose = true
             ansible.extra_vars = {
-                app_username: "vagrant",
-                copy_ssl_certs: false,
-                dashboard_server_name: "bndashboard.local",
-                django_git_branch: "develop",
-                include_ssl_certs: false,
-                listen_port: 80,
-                nginx_proxy_url: "http://localhost:8000",
+                username: "vagrant",
                 pronym_environment: "vagrant",
-                server_name: "bridgenet.local"
+                server_name: "bridgenet.local",
+                is_vagrant: true,
+                django_app_git_branch: "develop",
+                django_static_enable_webpack_packaging: false,
+                nginx_include_ssl_certs: false,
+                nginx_listen_port: 80,
+                bridgenet_dashboard_server_name: "bndashboard.local"
             }
         end
     end

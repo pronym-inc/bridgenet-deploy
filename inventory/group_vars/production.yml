@@ -2,7 +2,7 @@
 server_name: api.bridgenetins.com
 listen_port: 443
 pronym_environment: production
-include_ssl_certs: true
-copy_ssl_certs: true
-django_git_branch: master
+nginx_include_ssl_certs: true
+nginx_copy_ssl_certs: true
+django_app_git_branch: master
 integration_tests_enabled: true

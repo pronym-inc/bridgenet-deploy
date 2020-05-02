@@ -1,0 +1,17 @@
+---
+project_name: bridgenet
+configure_server_localhost_aliases:
+  - "{{ server_name }}"
+  - "{{ bridgenet_dashboard_server_name }}"
+django_app_git_url: git@github.com:pronym-inc/bridgenet.git
+django_static_enable_webpack_packaging: true
+django_static_webpack_targets:
+  - bnadmin
+  - web
+integration_tests_environment:
+  PYTHONPATH: "{{ src_base }}"
+  BRIDGENET_API_BASE_URL: https://{{ server_name }}
+  BRIDGENET_API_USERNAME: integration
+  BRIDGENET_API_PASSWORD: methodicus1
+nginx_main_site_aliases:
+  - "{{ bridgenet_dashboard_server_name }}"
