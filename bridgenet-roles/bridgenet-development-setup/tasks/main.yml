@@ -1,0 +1,10 @@
+---
+- name: bridgenet-development-setup initial
+  include_role:
+    name: bridgenet-development-setup
+    tasks_from: initial
+    apply:
+      tags:
+        - initial
+  tags:
+    - initial

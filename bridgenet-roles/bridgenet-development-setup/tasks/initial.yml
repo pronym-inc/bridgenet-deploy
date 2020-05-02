@@ -1,0 +1,7 @@
+---
+- name: Create API account for API integration tests
+  include_role:
+    name: django-application
+    tasks_from: run_django_shell_command
+  vars:
+    django_shell_command: from bridgenet.tests.core.factories import BridgenetApiAccountProfileFactory\nfrom pronym_api.test_utils.factories import ApiAccountMemberFactory\nexists = ApiAccount.objects.filter(name='{{ bridgenet_development_setup_api_integration_account_name }}').count() > 0\nif not exists:\n\tprof = BridgenetApiAccountProfileFactory(api_account__name='{{ bridgenet_development_setup_api_integration_account_name }}')\n\tmember = ApiAccountMemberFactory(api_account=prof.api_account, user__username='{{ bridgenet_development_setup_api_integration_username }}')\n\tmember.user.set_password('{{ bridgenet_development_setup_api_integration_password }}') or member.user.save()\nprint(exists)

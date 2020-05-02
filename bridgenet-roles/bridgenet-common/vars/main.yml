@@ -10,8 +10,9 @@ django_static_webpack_targets:
   - web
 integration_tests_environment:
   PYTHONPATH: "{{ src_base }}"
-  BRIDGENET_API_BASE_URL: https://{{ server_name }}
-  BRIDGENET_API_USERNAME: integration
-  BRIDGENET_API_PASSWORD: methodicus1
+  BRIDGENET_API_BASE_URL: http://{{ server_name }}
+  BRIDGENET_API_USERNAME: integration_api
+  BRIDGENET_API_PASSWORD: integration123
 nginx_main_site_aliases:
   - "{{ bridgenet_dashboard_server_name }}"
+secrets_local_dev_download_url: https://secrets.pronym.com/core/application/bridgenet/configuration/localdev/secrets/

@@ -11,6 +11,33 @@
     - redis
     - django-application
     - django-static
+    - django-runserver
+    - celery
+    - celery-beat
+    - nginx
+    - wdio-tests
+    - run-integration-tests
+    - bridgenet-development-setup
+  post_tasks:
+    - name: Bootstrap wdio tests
+      become_user: "{{ username }}"
+      shell: source ~/.nvm/nvm.sh && npm i && npx wdio run wdio.conf.js --spec signup.ts
+      args:
+        chdir: "{{ wdio_base_dir }}"
+        executable: /bin/bash
+      tags:
+        - initial
+- hosts: web
+  become: yes
+  roles:
+    - common-vars
+    - bridgenet-common
+    - secrets
+    - configure-server
+    - supervisor
+    - redis
+    - django-application
+    - django-static
     - django-gunicorn
     - celery
     - celery-beat

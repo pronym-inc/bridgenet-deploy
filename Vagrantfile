@@ -22,6 +22,8 @@ Vagrant.configure("2") do |config|
                 django_static_enable_webpack_packaging: false,
                 nginx_include_ssl_certs: false,
                 nginx_listen_port: 80,
+                secrets_api_token: "#{ENV['PRONYM_SECRETS_TOKEN']}",
+                secrets_download_local_dev_secrets: true,
                 bridgenet_dashboard_server_name: "bndashboard.local"
             }
         end
