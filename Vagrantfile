@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
         end
         web.vm.provision :ansible_local do |ansible|
             ansible.playbook = "playbook.yml"
-            ansible.tags = "secrets"
+            ansible.tags = "initial"
             ansible.verbose = true
             ansible.extra_vars = {
                 username: "vagrant",
