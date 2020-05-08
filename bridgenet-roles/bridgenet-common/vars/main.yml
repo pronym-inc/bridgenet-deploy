@@ -18,3 +18,4 @@ nginx_main_site_aliases:
 secrets_local_dev_download_url: https://secrets.pronym.com/core/application/bridgenet/configuration/localdev/secrets/
 wdio_environment:
   BRIDGENET_API_URL: https://{{ server_name }}
+  BRIDGENET_DASHBOARD_URL: https://{{ bridgenet_dashboard_server_name }}
