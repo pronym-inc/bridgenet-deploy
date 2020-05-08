@@ -1,5 +1,6 @@
 ---
 server_name: dev-api.bridgenetins.com
+bridgenet_dashboard_server_name: dev-account.bridgenetins.com
 listen_port: 443
 pronym_environment: dev
 nginx_include_ssl_certs: true
