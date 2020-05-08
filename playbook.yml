@@ -25,8 +25,7 @@
       args:
         chdir: "{{ wdio_base_dir }}"
         executable: /bin/bash
-      environment:
-        BRIDGENET_API_URL: http://{{ server_name }}
+      environment: "{{ wdio_environment }}"
       tags:
         - initial
 - hosts: web
@@ -54,7 +53,6 @@
       args:
         chdir: "{{ wdio_base_dir }}"
         executable: /bin/bash
-        environment:
-          BRIDGENET_API_URL: https://{{ server_name }}
+      environment: "{{ wdio_environment }}"
       tags:
         - initial
