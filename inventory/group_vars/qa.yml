@@ -1,0 +1,5 @@
+---
+server_name: qa-api.bridgenetins.com
+bridgenet_dashboard_server_name: qa-account.bridgenetins.com
+pronym_environment: qa
+django_app_git_branch: develop

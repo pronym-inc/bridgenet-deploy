@@ -1,9 +1,5 @@
 ---
 server_name: dev-api.bridgenetins.com
 bridgenet_dashboard_server_name: dev-account.bridgenetins.com
-listen_port: 443
 pronym_environment: dev
-nginx_include_ssl_certs: true
-nginx_copy_ssl_certs: true
-django_app_git_branch: develop
-integration_tests_enabled: true
+django_app_git_branch: master

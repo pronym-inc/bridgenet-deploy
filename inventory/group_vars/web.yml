@@ -1,0 +1,5 @@
+---
+listen_port: 443
+nginx_include_ssl_certs: true
+nginx_copy_ssl_certs: true
+integration_tests_enabled: true

@@ -1,9 +1,13 @@
 [production]
-18.217.186.163
+api.bridgenetins.com
 
 [dev]
-3.20.110.194
+dev-api.bridgenetins.com
+
+[qa]
+qa-api.bridgenetins.com
 
 [web]
-18.217.186.163
-3.20.110.194
+api.bridgenetins.com
+dev-api.bridgenetins.com
+qa-api.bridgenetins.com
