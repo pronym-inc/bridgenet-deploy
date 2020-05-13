@@ -1,3 +1,7 @@
+[prod]
+api.bridgenetins.com
+dev-api.bridgenetins.com
+
 [production]
 api.bridgenetins.com
 
