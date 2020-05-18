@@ -24,7 +24,8 @@ Vagrant.configure("2") do |config|
                 nginx_listen_port: 80,
                 secrets_api_token: "#{ENV['PRONYM_SECRETS_TOKEN']}",
                 secrets_download_local_dev_secrets: true,
-                bridgenet_dashboard_server_name: "bndashboard.local"
+                bridgenet_dashboard_server_name: "bndashboard.local",
+                bridgenet_web_protocol: "http"
             }
         end
     end
