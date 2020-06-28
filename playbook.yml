@@ -36,7 +36,6 @@
     - secrets
     - configure-server
     - supervisor
-    - postgres
     - redis
     - django-application
     - django-static
